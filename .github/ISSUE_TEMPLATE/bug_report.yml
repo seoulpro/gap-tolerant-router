@@ -1,0 +1,50 @@
+name: Bug report
+description: Report incorrect routing behavior, a crash, or an invalid rejection.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not report security-sensitive issues here. For unbounded
+        resource use, crashes outside documented validation, cross-request
+        mutation, or one-way bypasses, follow [SECURITY.md](../../SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Package version or commit you are running.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: What you observed, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: network
+    attributes:
+      label: Minimal network and query
+      description: >
+        The smallest in-memory nodes and segments, the router options, and the
+        route call that reproduce the problem. Use unitless coordinates; do not
+        paste real or identifiable map data.
+      render: js
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Actual result
+      description: The returned route or failure reason, and the `diagnostics` if relevant.
+      render: js
+    validations:
+      required: false
+  - type: input
+    id: node
+    attributes:
+      label: Node.js version
+      placeholder: "22.x"
+    validations:
+      required: false

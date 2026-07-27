@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a new capability, option, or change to routing behavior.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A new repair heuristic, a change to route cost or a default tolerance,
+        or a change to the input/output contract is best discussed here before
+        any pull request. Security-sensitive reports belong in
+        [SECURITY.md](../../SECURITY.md), not here.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: The routing situation or data defect that the current API handles poorly.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: >
+        What you would like added or changed, and how it fits the existing
+        input, option, or result contract.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing options or adapter-side workarounds you have tried or ruled out.
+    validations:
+      required: false

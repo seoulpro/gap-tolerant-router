@@ -1,0 +1,47 @@
+{
+  "name": "gap-tolerant-router",
+  "version": "0.1.0",
+  "description": "A deterministic router for imperfect planar line networks.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "types": "./src/index.d.ts",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "coverage": "node --experimental-test-coverage --test --test-coverage-lines=95 --test-coverage-branches=85 --test-coverage-functions=95",
+    "lint": "node --check src/index.js && node --check src/router.js && node --check src/instructions.js",
+    "typecheck": "tsc --project tsconfig.json",
+    "package:check": "node scripts/check-package.mjs",
+    "check": "npm run lint && npm run typecheck && npm run coverage && npm run package:check",
+    "prepublishOnly": "npm run check"
+  },
+  "keywords": [
+    "routing",
+    "graph",
+    "a-star",
+    "pathfinding",
+    "planar-graph",
+    "topology"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "license": "MIT"
+}
