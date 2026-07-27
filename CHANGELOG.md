@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims
 to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.1 - 2026-07-28
+
+### Fixed
+
+- Corrected the README installation guidance to the published npm package
+  (`npm install gap-tolerant-router`) instead of a local source checkout.
+
 ## 0.1.0 - 2026-07-28
 
 Initial release.

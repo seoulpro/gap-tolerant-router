@@ -26,19 +26,12 @@ policy, or real-world safety.
 
 ## Install
 
-The package is not published to a registry. Install it from a source checkout.
-Clone the repository, then from the checkout run:
-
 ```sh
-npm ci
+npm install gap-tolerant-router
 ```
 
-To consume it from another local project, reference the checkout directory, for
-example a sibling directory:
-
-```sh
-npm install ../gap-tolerant-router
-```
+The package is published on npm as
+[gap-tolerant-router](https://www.npmjs.com/package/gap-tolerant-router).
 
 Node.js 22 or newer is required. The package is ESM-only and has no runtime
 dependencies. TypeScript declarations are included.
