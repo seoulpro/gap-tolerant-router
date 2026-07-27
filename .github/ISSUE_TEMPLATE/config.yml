@@ -1,3 +1,7 @@
 # Security-sensitive reports must not be filed as public issues.
 # Follow SECURITY.md for private vulnerability reporting instead.
 blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/seoulpro/gap-tolerant-router/security/advisories/new
+    about: Report vulnerabilities privately, as described in SECURITY.md.
