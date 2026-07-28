@@ -244,6 +244,30 @@ geometry are rejected with a `TypeError`.
 - Per-query anchors and any fallback bridges are discarded after each `route`
   call and never accumulate across queries.
 
+## Reference scenarios
+
+A fully synthetic, deterministic fixture exercises the repairs and guards on a
+small planar network. It is generated from a fixed seed and is not production
+data, derived data, or anonymized real data. The eight cases are:
+
+| Case | Scenario | Expected result | Repair or guard |
+| --- | --- | --- | --- |
+| case-001 | Ordinary route | route, 71 units | two anchor snaps; only `anchor-snap` |
+| case-002 | Endpoint merge | route, 81.355395 units | endpoint records merged; no gap leg |
+| case-003 | Short component gap | route, 82 units | `nearby-components` |
+| case-004 | Undershot junction | route, 57 units | `dead-end-projection` |
+| case-005 | Off-network points | route, 55.218253 units | start and goal `anchor-snap` |
+| case-006 | One-way rejection | `no-route` | reverse traversal stays forbidden |
+| case-007 | Disconnected components | `no-route` | no fallback enabled |
+| case-008 | Opt-in fallback | route, 98 units | one `fallback-bridge` |
+
+The fixture pairs a clean network (73 nodes, 75 segments) with an imperfect
+network (74 nodes, 72 segments) that introduces the defects each case covers.
+
+A local reference benchmark run and its methodology are recorded in
+[docs/benchmarks.md](./docs/benchmarks.md). Those timings describe one machine
+and are not a performance guarantee.
+
 ## Limits
 
 This repository intentionally contains no:
