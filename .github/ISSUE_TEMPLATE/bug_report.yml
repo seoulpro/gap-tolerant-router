@@ -7,7 +7,8 @@ body:
       value: |
         Please do not report security-sensitive issues here. For unbounded
         resource use, crashes outside documented validation, cross-request
-        mutation, or one-way bypasses, follow [SECURITY.md](../../SECURITY.md).
+        mutation, or one-way bypasses, follow the
+        [security policy](https://github.com/seoulpro/gap-tolerant-router/security/policy).
   - type: input
     id: version
     attributes:

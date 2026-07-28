@@ -7,8 +7,9 @@ body:
       value: |
         A new repair heuristic, a change to route cost or a default tolerance,
         or a change to the input/output contract is best discussed here before
-        any pull request. Security-sensitive reports belong in
-        [SECURITY.md](../../SECURITY.md), not here.
+        any pull request. Security-sensitive reports belong in the
+        [security policy](https://github.com/seoulpro/gap-tolerant-router/security/policy),
+        not here.
   - type: textarea
     id: problem
     attributes:

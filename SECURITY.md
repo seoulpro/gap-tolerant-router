@@ -3,16 +3,27 @@
 `gap-tolerant-router` is an in-memory algorithm. It does not read files, open
 network connections, or execute input as code.
 
+## Supported versions
+
+Security fixes are prepared for the latest published release on npm only.
+Reports involving earlier releases are still welcome. If it is safe and
+practical to do so, it helps to check whether the issue also reproduces on the
+latest release, but that check is not a prerequisite for reporting.
+
 ## Reporting a vulnerability
 
 Report privately when crafted input can cause unbounded resource use, a process
 crash outside the documented validation behavior, mutation that affects a later
 request, or a bypass of one-way traversal.
 
-Use the repository's private vulnerability reporting on GitHub (**Security →
-Report a vulnerability**). If that is unavailable, open a public issue that asks
-for a private channel but **does not include the reproducing data**, and share
-the details once a private channel is established.
+Please report privately rather than in a public issue. Do not put vulnerability
+details in a public issue.
+
+- Preferred: open a private report through GitHub private vulnerability
+  reporting at
+  <https://github.com/seoulpro/gap-tolerant-router/security/advisories/new>.
+- If that form is unavailable, email
+  [lim@limsumin.com](mailto:lim@limsumin.com).
 
 Please include the affected version, the smallest network that demonstrates the
 problem, the options used, the impact, and a proposed limit or mitigation if you
