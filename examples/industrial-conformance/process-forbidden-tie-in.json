@@ -1,0 +1,84 @@
+{
+  "fixtureVersion": 1,
+  "id": "process-forbidden-tie-in",
+  "provenance": {
+    "origin": "fully-synthetic",
+    "containsRealOperationalData": false,
+    "containsPersonalOrClinicalData": false
+  },
+  "scopeBoundary": "The supplied constraint blocks this geometric candidate; it is not a HAZOP, materials, pressure, flow-direction, or tie-in permit decision.",
+  "input": {
+    "snapshot": {
+      "schema": "gtr.network/v1",
+      "networkId": "synthetic-process-network",
+      "revision": "fixture-1",
+      "space": {
+        "dimensions": 2,
+        "unit": "m",
+        "frame": "synthetic-plant-grid"
+      },
+      "nodes": [
+        { "id": "p-header-a", "position": [0, 0] },
+        { "id": "p-header-b", "position": [10, 0] },
+        { "id": "p-branch-source", "position": [5, 2] },
+        { "id": "p-branch-tip", "position": [5, 0.6] }
+      ],
+      "edges": [
+        {
+          "id": "p-main-header",
+          "from": "p-header-a",
+          "to": "p-header-b",
+          "geometry": [[0, 0], [10, 0]],
+          "properties": {
+            "service": "steam",
+            "lineClass": "S1"
+          }
+        },
+        {
+          "id": "p-branch-stub",
+          "from": "p-branch-source",
+          "to": "p-branch-tip",
+          "geometry": [[5, 2], [5, 0.6]],
+          "properties": {
+            "service": "clean-water",
+            "lineClass": "W1"
+          }
+        }
+      ]
+    },
+    "proposal": {
+      "maxGapDistance": 1,
+      "maxCandidatesPerEndpoint": 4,
+      "includeEndpointToEdge": true,
+      "requireDifferentComponents": true,
+      "requireTangentEvidence": true
+    },
+    "constraints": {
+      "forbiddenNodeEdgePairs": [
+        ["p-branch-tip", "p-main-header"]
+      ]
+    }
+  },
+  "expected": {
+    "candidateCount": 1,
+    "candidateId": "37493499b6dc4fc0a8b3ecfd0f25a52f6a7ca6c3ba6eaba2b77bc9ebdf489680",
+    "operation": {
+      "kind": "attach-node-to-edge",
+      "fromNodeId": "p-branch-tip",
+      "toEdgeId": "p-main-header",
+      "edgeFromNodeId": "p-header-a",
+      "edgeToNodeId": "p-header-b",
+      "edgeSegmentIndex": 0,
+      "segmentFraction": 0.5,
+      "distanceAlong": 5
+    },
+    "geometry": [[5, 0.6], [5, 0]],
+    "distance": 0.6,
+    "status": "reject",
+    "reasonCodes": ["FORBIDDEN_CONNECTION"],
+    "constraintResults": [
+      { "id": "different-components", "result": "pass" },
+      { "id": "forbidden-connection", "result": "fail" }
+    ]
+  }
+}

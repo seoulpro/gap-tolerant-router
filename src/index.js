@@ -1,5 +1,6 @@
 export {
   GapRouter,
+  RouterLimitError,
   createRouter,
   lineLength,
   projectPointToLine,

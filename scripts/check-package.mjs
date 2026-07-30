@@ -59,13 +59,21 @@ try {
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
+    "examples/industrial-conformance/amr-missing-heading.json",
+    "examples/industrial-conformance/biomedical-morphology-3d.json",
+    "examples/industrial-conformance/process-forbidden-tie-in.json",
+    "examples/industrial-conformance/utility-distribution-gap.json",
+    "examples/run-industrial-conformance.mjs",
     "LICENSE",
     "README.md",
     "SECURITY.md",
     "package.json",
+    "src/engine.d.ts",
+    "src/engine.js",
     "src/index.d.ts",
     "src/index.js",
     "src/instructions.js",
+    "src/numerics.js",
     "src/router.js",
   ]) {
     assert.equal(
@@ -102,17 +110,29 @@ try {
     `import assert from "node:assert/strict";
 import {
   GapRouter,
+  RouterLimitError,
   buildInstructions,
   createRouter,
   lineLength,
   projectPointToLine,
 } from "gap-tolerant-router";
+import {
+  GapAnalysisEngine,
+  GapEngineLimitError,
+  analyzeGaps,
+  createGapEngine,
+} from "gap-tolerant-router/engine";
 
 assert.equal(typeof GapRouter, "function");
+assert.equal(typeof RouterLimitError, "function");
 assert.equal(typeof createRouter, "function");
 assert.equal(typeof buildInstructions, "function");
 assert.equal(lineLength([[0, 0], [3, 4]]), 5);
 assert.equal(projectPointToLine({ x: 2, y: 1 }, [[0, 0], [4, 0]]).x, 2);
+assert.equal(typeof GapAnalysisEngine, "function");
+assert.equal(typeof GapEngineLimitError, "function");
+assert.equal(typeof createGapEngine, "function");
+assert.equal(typeof analyzeGaps, "function");
 
 const router = createRouter({
   nodes: [
@@ -134,6 +154,26 @@ const route = router.route(
 );
 assert.equal(route.ok, true);
 assert.equal(route.distance, 8);
+
+const analysis = analyzeGaps({
+  snapshot: {
+    schema: "gtr.network/v1",
+    networkId: "smoke",
+    revision: "r1",
+    space: { dimensions: 2, unit: "m", frame: "local" },
+    nodes: [
+      { id: "a", position: [0, 0] },
+      { id: "b", position: [1, 0] },
+    ],
+    edges: [],
+  },
+  proposal: {
+    includeEndpointToEdge: false,
+    maxGapDistance: 2,
+  },
+});
+assert.equal(analysis.executionComplete, true);
+assert.equal(analysis.candidates[0].assessment.status, "abstain");
 `,
   );
   run(process.execPath, ["smoke.mjs"], consumerDirectory);

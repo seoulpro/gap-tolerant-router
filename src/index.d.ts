@@ -37,10 +37,37 @@ export interface RouterOptions {
   maxFallbackBridgeDistance?: number;
 }
 
+export interface RouterLimits {
+  maxNodes?: number;
+  maxSegments?: number;
+  maxCoordinates?: number;
+  maxSpatialSamplesTotal?: number;
+  maxCandidateEvaluations?: number;
+  maxSearchExpansions?: number;
+  maxFallbackPairEvaluations?: number;
+}
+
+export type RouterLimitCode =
+  | "MAX_NODES"
+  | "MAX_SEGMENTS"
+  | "MAX_COORDINATES"
+  | "MAX_SPATIAL_SAMPLES_TOTAL"
+  | "MAX_CANDIDATE_EVALUATIONS"
+  | "MAX_SEARCH_EXPANSIONS"
+  | "MAX_FALLBACK_PAIR_EVALUATIONS";
+
+export type RouterLimitPhase =
+  | "input"
+  | "spatial-index"
+  | "candidate-generation"
+  | "search"
+  | "fallback";
+
 export interface RouterInput<Metadata = unknown> {
   nodes: readonly RouterNode[] | Map<NodeId, Point>;
   segments: readonly Segment<Metadata>[];
   options?: RouterOptions;
+  limits?: RouterLimits;
 }
 
 export interface RouteOptions {
@@ -149,6 +176,19 @@ export class GapRouter<Metadata = unknown> {
     goal: Point,
     options?: RouteOptions,
   ): RouteResult<Metadata>;
+}
+
+export class RouterLimitError extends RangeError {
+  constructor(
+    code: RouterLimitCode,
+    phase: RouterLimitPhase,
+    limit: number,
+    actual: number,
+  );
+  readonly code: RouterLimitCode;
+  readonly phase: RouterLimitPhase;
+  readonly limit: number;
+  readonly actual: number;
 }
 
 export function createRouter<Metadata = unknown>(

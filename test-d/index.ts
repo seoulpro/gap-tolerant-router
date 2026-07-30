@@ -1,11 +1,13 @@
 import {
   GapRouter,
+  RouterLimitError,
   buildInstructions,
   createRouter,
   lineLength,
   projectPointToLine,
   type RouteResult,
   type RouterInput,
+  type RouterLimits,
 } from "gap-tolerant-router";
 
 interface Metadata {
@@ -28,7 +30,17 @@ const input: RouterInput<Metadata> = {
     endpointTolerance: 0,
     mergeTolerance: 0,
   },
+  limits: {
+    maxNodes: 100,
+    maxSearchExpansions: 10_000,
+  },
 };
+
+const limits: RouterLimits = {
+  maxCandidateEvaluations: 50_000,
+  maxSpatialSamplesTotal: 50_000,
+};
+void limits;
 
 const router = new GapRouter(input);
 const equivalent = createRouter(input);
@@ -63,6 +75,26 @@ const projection = projectPointToLine(
 const projectedX: number | undefined = projection?.x;
 void length;
 void projectedX;
+
+try {
+  throw new RouterLimitError(
+    "MAX_NODES",
+    "input",
+    1,
+    2,
+  );
+} catch (error) {
+  if (error instanceof RouterLimitError) {
+    const code: "MAX_NODES"
+      | "MAX_SEGMENTS"
+      | "MAX_COORDINATES"
+      | "MAX_SPATIAL_SAMPLES_TOTAL"
+      | "MAX_CANDIDATE_EVALUATIONS"
+      | "MAX_SEARCH_EXPANSIONS"
+      | "MAX_FALLBACK_PAIR_EVALUATIONS" = error.code;
+    void code;
+  }
+}
 
 // @ts-expect-error coordinates must contain numbers
 lineLength([[0, "invalid"]]);
