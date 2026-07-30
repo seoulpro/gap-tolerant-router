@@ -1,6 +1,6 @@
 {
   "name": "gap-tolerant-router",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A deterministic router for imperfect planar line networks.",
   "type": "module",
   "sideEffects": false,
@@ -48,7 +48,7 @@
   "engines": {
     "node": ">=22"
   },
-  "author": "seoulpro <lim@limsumin.com>",
+  "author": "Sumin Lim <lim@limsumin.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seoulpro/gap-tolerant-router.git"

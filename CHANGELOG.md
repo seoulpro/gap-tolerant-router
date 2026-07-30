@@ -6,6 +6,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## 0.2.0 - 2026-07-31
+
 ### Added
 
 - `gap-tolerant-router/engine` subpath export: a proposal-only gap analysis
