@@ -4,6 +4,47 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims
 to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `gap-tolerant-router/engine` subpath export: a proposal-only gap analysis
+  engine (`analyzeGaps`, `createGapEngine`, `GapAnalysisEngine`) that copies a
+  `gtr.network/v1` snapshot in 2D or 3D Euclidean space and returns candidate
+  connections without routing or mutating the source graph. Each candidate
+  carries geometry, binary64 distance and tangent-alignment features
+  (alignments normalized to 15 significant digits), an operation
+  (`connect-nodes` with `direction: "unspecified"`, or `attach-node-to-edge`),
+  and an assessment of `review`, `reject`, or `abstain`; there is no confidence
+  field and `review` always defers to an external decision.
+- Deterministic engine behavior: content-addressed candidate identity, ordering
+  independent of input order, forbidden node-pair and node-to-edge constraints,
+  optional different-component and tangent-evidence requirements, and
+  `per-endpoint-union` candidate selection over a balanced AABB spatial index.
+- SHA-256 network, configuration, execution-profile, candidate-identity, and
+  analysis digests for reproducibility and integrity checking. The digests are
+  not signatures, authentication, or anonymization.
+- Bounded engine execution: default resource limits (`maxNodes`, `maxEdges`,
+  `maxTotalPoints`, `maxPropertyFields`, `maxPropertyBytes`, `maxStringBytes`,
+  `maxConstraintPairs`, `maxNeighborChecks`, `maxCandidatesTotal`, and
+  `maxOutputBytes`) enforced across input, candidate generation, and output,
+  reported through `GapEngineLimitError`.
+- Optional `limits` execution profile and `RouterLimitError` for the existing
+  `GapRouter`. Most limits default to `Infinity` for backward compatibility,
+  while the existing spatial-sample guards remain in place.
+- Four fully synthetic industrial conformance fixtures under
+  `examples/industrial-conformance/`, runnable with
+  `npm run examples:industrial`. They are contract examples only and contain no
+  real, derived, identifiable, operational, personal, or clinical data.
+- TypeScript declarations and packed-package smoke coverage for the engine
+  subpath.
+
+### Changed
+
+- Hardened numeric projection and geometry handling across extreme finite
+  coordinate scales and reversed segment orientation, and tightened validation
+  to reject non-finite route distances and degenerate spatial grids.
+
 ## 0.1.1 - 2026-07-28
 
 ### Fixed
