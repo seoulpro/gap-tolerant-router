@@ -33,9 +33,21 @@ pull request.
   fixed bug, asserting both the route and the relevant diagnostics.
 - `test/instructions.test.js` — `buildInstructions` output and option handling.
 - `test/performance.test.js` — the bounded build-and-search smoke budget.
+- `test/engine.test.js` — `gap-tolerant-router/engine` analysis behavior:
+  candidates, statuses, operations, constraints, digests, and determinism.
+- `test/engine-conformance.test.js` — the synthetic industrial fixtures under
+  `examples/industrial-conformance/` and their expected candidate, operation,
+  distance, and status.
+- `test/engine-performance.test.js` — the engine's bounded execution smoke
+  budget.
+- `test/limits.test.js` — router resource limits and the errors they raise;
+  engine limits are covered in `test/engine.test.js`.
+- `test/numerics.test.js` — the exact, order-independent numeric helpers.
 
 Represent topology bugs with minimal in-memory networks and unitless
-coordinates. Do not add real routes or identifiable map data.
+coordinates. Do not add real routes or identifiable map data; engine fixtures
+must stay fully synthetic and free of real, derived, operational, personal, or
+clinical data.
 
 ## Invariants to preserve
 

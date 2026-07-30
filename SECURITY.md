@@ -36,9 +36,21 @@ issues; they belong in the public issue tracker. This package repairs geometric
 connectivity — it does not determine legal access or provide a safety-certified
 route.
 
-The constructor rejects non-finite geometry and invalid numeric options before
-building any spatial index, and a single segment that would require more than
-1,000,000 index samples fails fast with a `RangeError`. It intentionally does
-not impose a universal graph-size limit. Applications that accept untrusted or
-very large graphs are responsible for bounding node and segment counts and for
-enforcing their own runtime limits.
+The `GapRouter` constructor rejects non-finite geometry and invalid numeric
+options before building any spatial index, and a single segment that would
+require more than 1,000,000 index samples fails fast with a `RangeError`. Most
+compatibility limits otherwise remain unbounded and suit trusted in-process
+data. For untrusted or very large input, pass an optional `limits` profile on
+the router input to bound node, segment, coordinate, sampling, and search work;
+the router then throws a `RouterLimitError` when a bound is exceeded.
+Applications remain responsible for choosing those bounds and for enforcing
+their own runtime limits.
+
+The `gap-tolerant-router/engine` entry point is bounded by default: it validates
+its immutable snapshot input, rejects unexpected or non-scalar fields, and
+enforces resource limits across input, candidate generation, and output,
+throwing a `GapEngineLimitError` when a bound is exceeded. Those limits form an
+operator-controlled execution profile, so do not copy limit values from an
+untrusted request. Request- and body-size limits and parser isolation remain the
+adapter's responsibility. These bounds guard resource use; they are not a safety,
+domain-validity, or authorization control.
