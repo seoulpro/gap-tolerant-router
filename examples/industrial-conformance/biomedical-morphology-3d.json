@@ -1,0 +1,78 @@
+{
+  "fixtureVersion": 1,
+  "id": "biomedical-morphology-3d",
+  "provenance": {
+    "origin": "fully-synthetic",
+    "containsRealOperationalData": false,
+    "containsPersonalOrClinicalData": false
+  },
+  "scopeBoundary": "Proximity and tangent alignment do not establish cell identity, neurite continuity, compartment class, synapse, biological causality, diagnosis, or permission to repair a skeleton.",
+  "input": {
+    "snapshot": {
+      "schema": "gtr.network/v1",
+      "networkId": "synthetic-biomedical-morphology",
+      "revision": "fixture-1",
+      "space": {
+        "dimensions": 3,
+        "unit": "um",
+        "frame": "synthetic-volume-xyz"
+      },
+      "nodes": [
+        { "id": "bio-a-root", "position": [-0.6, -0.8, -1] },
+        { "id": "bio-a-tip", "position": [0, 0, 0] },
+        { "id": "bio-b-root", "position": [0.9, 1.2, 1.5] },
+        { "id": "bio-b-tip", "position": [0.3, 0.4, 0.5] }
+      ],
+      "edges": [
+        {
+          "id": "bio-a-fragment",
+          "from": "bio-a-root",
+          "to": "bio-a-tip",
+          "geometry": [[-0.6, -0.8, -1], [0, 0, 0]],
+          "properties": {
+            "structure": "neurite-fragment",
+            "cellAssignment": "unresolved",
+            "compartmentHint": "unknown"
+          }
+        },
+        {
+          "id": "bio-b-fragment",
+          "from": "bio-b-tip",
+          "to": "bio-b-root",
+          "geometry": [[0.3, 0.4, 0.5], [0.9, 1.2, 1.5]],
+          "properties": {
+            "structure": "neurite-fragment",
+            "cellAssignment": "unresolved",
+            "compartmentHint": "unknown"
+          }
+        }
+      ]
+    },
+    "proposal": {
+      "maxGapDistance": 0.8,
+      "maxCandidatesPerEndpoint": 4,
+      "includeEndpointToEdge": false,
+      "requireDifferentComponents": true,
+      "requireTangentEvidence": true
+    }
+  },
+  "expected": {
+    "candidateCount": 1,
+    "candidateId": "b34d73bfe7343b287857512793adee593f8f78ced82556306e2a542ac1f8b1af",
+    "operation": {
+      "kind": "connect-nodes",
+      "fromNodeId": "bio-a-tip",
+      "toNodeId": "bio-b-tip",
+      "direction": "unspecified"
+    },
+    "geometry": [[0, 0, 0], [0.3, 0.4, 0.5]],
+    "distance": 0.7071067811865476,
+    "status": "review",
+    "reasonCodes": ["HUMAN_REVIEW_REQUIRED"],
+    "constraintResults": [
+      { "id": "different-components", "result": "pass" },
+      { "id": "forbidden-connection", "result": "pass" },
+      { "id": "tangent-evidence", "result": "pass" }
+    ]
+  }
+}

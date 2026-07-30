@@ -1,0 +1,104 @@
+{
+  "fixtureVersion": 1,
+  "id": "utility-distribution-gap",
+  "provenance": {
+    "origin": "fully-synthetic",
+    "containsRealOperationalData": false,
+    "containsPersonalOrClinicalData": false
+  },
+  "scopeBoundary": "This geometry review is not electrical phase, protection, switching, energization, or work-permit approval.",
+  "input": {
+    "snapshot": {
+      "schema": "gtr.network/v1",
+      "networkId": "synthetic-utility-distribution",
+      "revision": "fixture-1",
+      "space": {
+        "dimensions": 2,
+        "unit": "m",
+        "frame": "synthetic-site-grid"
+      },
+      "nodes": [
+        {
+          "id": "u-a-source",
+          "position": [-2, 0],
+          "properties": {
+            "assetClass": "distribution-terminal",
+            "nominalKv": 13.8
+          }
+        },
+        {
+          "id": "u-a-tip",
+          "position": [0, 0],
+          "properties": {
+            "assetClass": "distribution-terminal",
+            "nominalKv": 13.8
+          }
+        },
+        {
+          "id": "u-b-source",
+          "position": [2.8, 0],
+          "properties": {
+            "assetClass": "distribution-terminal",
+            "nominalKv": 13.8
+          }
+        },
+        {
+          "id": "u-b-tip",
+          "position": [0.8, 0],
+          "properties": {
+            "assetClass": "distribution-terminal",
+            "nominalKv": 13.8
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "u-a-cable",
+          "from": "u-a-source",
+          "to": "u-a-tip",
+          "geometry": [[-2, 0], [0, 0]],
+          "properties": {
+            "assetClass": "distribution-cable",
+            "operatingState": "unknown"
+          }
+        },
+        {
+          "id": "u-b-cable",
+          "from": "u-b-tip",
+          "to": "u-b-source",
+          "geometry": [[0.8, 0], [2.8, 0]],
+          "properties": {
+            "assetClass": "distribution-cable",
+            "operatingState": "unknown"
+          }
+        }
+      ]
+    },
+    "proposal": {
+      "maxGapDistance": 1,
+      "maxCandidatesPerEndpoint": 4,
+      "includeEndpointToEdge": false,
+      "requireDifferentComponents": true,
+      "requireTangentEvidence": true
+    }
+  },
+  "expected": {
+    "candidateCount": 1,
+    "candidateId": "182fe908d972519b63fe49c99651c4978a014838ac3f909df0e7b4200e609139",
+    "operation": {
+      "kind": "connect-nodes",
+      "fromNodeId": "u-a-tip",
+      "toNodeId": "u-b-tip",
+      "direction": "unspecified"
+    },
+    "geometry": [[0, 0], [0.8, 0]],
+    "distance": 0.8,
+    "status": "review",
+    "reasonCodes": ["HUMAN_REVIEW_REQUIRED"],
+    "constraintResults": [
+      { "id": "different-components", "result": "pass" },
+      { "id": "forbidden-connection", "result": "pass" },
+      { "id": "tangent-evidence", "result": "pass" }
+    ]
+  }
+}

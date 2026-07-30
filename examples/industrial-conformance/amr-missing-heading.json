@@ -1,0 +1,69 @@
+{
+  "fixtureVersion": 1,
+  "id": "amr-missing-heading",
+  "provenance": {
+    "origin": "fully-synthetic",
+    "containsRealOperationalData": false,
+    "containsPersonalOrClinicalData": false
+  },
+  "scopeBoundary": "No aisle direction, footprint, clearance, obstacle, kinematic, traffic-control, mission, or safety-controller authorization is inferred.",
+  "input": {
+    "snapshot": {
+      "schema": "gtr.network/v1",
+      "networkId": "synthetic-amr-map",
+      "revision": "fixture-1",
+      "space": {
+        "dimensions": 2,
+        "unit": "m",
+        "frame": "synthetic-warehouse-map"
+      },
+      "nodes": [
+        {
+          "id": "amr-a-waypoint",
+          "position": [0, 0],
+          "properties": {
+            "nodeRole": "waypoint",
+            "zone": "aisle-7",
+            "headingAvailable": false
+          }
+        },
+        {
+          "id": "amr-b-waypoint",
+          "position": [0.5, 0],
+          "properties": {
+            "nodeRole": "waypoint",
+            "zone": "aisle-7",
+            "headingAvailable": false
+          }
+        }
+      ],
+      "edges": []
+    },
+    "proposal": {
+      "maxGapDistance": 1,
+      "maxCandidatesPerEndpoint": 4,
+      "includeEndpointToEdge": false,
+      "requireDifferentComponents": true,
+      "requireTangentEvidence": true
+    }
+  },
+  "expected": {
+    "candidateCount": 1,
+    "candidateId": "4ede428958668abfc54b4f3f7d0163ff1c1a0f215828697db66c2a1ef57d848b",
+    "operation": {
+      "kind": "connect-nodes",
+      "fromNodeId": "amr-a-waypoint",
+      "toNodeId": "amr-b-waypoint",
+      "direction": "unspecified"
+    },
+    "geometry": [[0, 0], [0.5, 0]],
+    "distance": 0.5,
+    "status": "abstain",
+    "reasonCodes": ["TANGENT_EVIDENCE_UNAVAILABLE"],
+    "constraintResults": [
+      { "id": "different-components", "result": "pass" },
+      { "id": "forbidden-connection", "result": "pass" },
+      { "id": "tangent-evidence", "result": "unknown" }
+    ]
+  }
+}

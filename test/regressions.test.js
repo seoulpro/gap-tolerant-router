@@ -140,7 +140,7 @@ test("keeps projected decimal geometry continuous through a junction", () => {
   const result = router.route(
     { x: 50, y: 150.0009 },
     { x: -100, y: -99.9991 },
-    { maxSnapDistance: 0 },
+    { maxSnapDistance: 1e-12 },
   );
 
   assert.equal(result.ok, true);
@@ -155,6 +155,321 @@ test("keeps projected decimal geometry continuous through a junction", () => {
     [0, 0.0009],
     [-100, -99.9991],
   ]);
+});
+
+test("charges the exact snap distance when coordinates round together", () => {
+  const base = 1e16;
+  const router = new GapRouter({
+    nodes: [
+      { id: "a", x: base, y: base },
+      { id: "b", x: base + 4, y: base + 8 },
+    ],
+    segments: [
+      segment(
+        "line",
+        "a",
+        "b",
+        [[base, base], [base + 4, base + 8]],
+        { speed: 1 },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 0,
+      mergeTolerance: 0,
+    },
+  });
+
+  const result = router.route(
+    { x: base + 2, y: base + 2 },
+    { x: base + 4, y: base + 8 },
+    { anchorCandidateCount: 1, maxSnapDistance: 1 },
+  );
+
+  assert.equal(result.ok, true);
+  const snap = result.legs.find((leg) => leg.reason === "anchor-snap");
+  assert.ok(snap);
+  assert.equal(snap.length, Math.sqrt(0.8));
+  assert.equal(snap.cost, Math.sqrt(0.8));
+  assert.equal(result.snapDistance.start, Math.sqrt(0.8));
+  assert.equal(
+    result.distance,
+    Math.sqrt(0.8) + Math.hypot(4, 8) * 0.7,
+  );
+});
+
+test("charges an exact dead-end gap when coordinates round together", () => {
+  const base = 1e16;
+  const router = new GapRouter({
+    nodes: [
+      { id: "bar-a", x: base, y: base },
+      { id: "bar-b", x: base + 4, y: base + 8 },
+      { id: "stem-a", x: base + 2, y: base - 8 },
+      { id: "stem-b", x: base + 2, y: base + 2 },
+    ],
+    segments: [
+      segment(
+        "bar",
+        "bar-a",
+        "bar-b",
+        [[base, base], [base + 4, base + 8]],
+        { speed: 1 },
+      ),
+      segment(
+        "stem",
+        "stem-a",
+        "stem-b",
+        [[base + 2, base - 8], [base + 2, base + 2]],
+        { speed: 1 },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 1,
+      mergeTolerance: 0,
+      projectionMinGain: 0,
+      segmentSampleStep: 16,
+    },
+  });
+
+  const result = router.route(
+    { x: base + 2, y: base - 8 },
+    { x: base + 4, y: base + 8 },
+    { anchorCandidateCount: 1, maxSnapDistance: 0 },
+  );
+
+  assert.equal(result.ok, true);
+  const gap = result.legs.find(
+    (leg) => leg.reason === "dead-end-projection",
+  );
+  assert.ok(gap);
+  assert.equal(gap.length, Math.sqrt(0.8));
+  assert.equal(gap.cost, Math.sqrt(0.8));
+  assert.equal(result.diagnostics.projectedDeadEnds, 1);
+});
+
+test("keeps a subnormal projection connected to its nearby endpoint", () => {
+  const minimum = Number.MIN_VALUE;
+  const router = new GapRouter({
+    nodes: [
+      { id: "a", x: -5, y: -7 },
+      { id: "b", x: 0, y: 0 },
+    ],
+    segments: [
+      segment(
+        "line",
+        "a",
+        "b",
+        [[-5, -7], [0, 0]],
+        { oneWay: true, speed: 1 },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 0,
+      mergeTolerance: 0,
+    },
+  });
+
+  const result = router.route(
+    { x: 0, y: -minimum },
+    { x: 0, y: 0 },
+    { anchorCandidateCount: 1, maxSnapDistance: minimum },
+  );
+
+  assert.equal(result.ok, true);
+  assert.equal(result.snapDistance.start, minimum);
+  assert.equal(result.distance, 2 * minimum);
+  const network = result.legs.find((leg) => leg.kind === "network");
+  assert.ok(network);
+  assert.equal(network.length, minimum);
+  assert.deepEqual(network.coordinates, [[0, -minimum], [0, 0]]);
+});
+
+test("orders distinct projections whose fractions round together", () => {
+  const minimum = Number.MIN_VALUE;
+  const router = new GapRouter({
+    nodes: [
+      { id: "a", x: -5, y: -7 },
+      { id: "b", x: 0, y: 0 },
+    ],
+    segments: [
+      segment(
+        "line",
+        "a",
+        "b",
+        [[-5, -7], [0, 0]],
+        { oneWay: true, speed: 1 },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 0,
+      mergeTolerance: 0,
+    },
+  });
+  const routeOptions = {
+    anchorCandidateCount: 1,
+    maxSnapDistance: minimum,
+  };
+
+  const forward = router.route(
+    { x: 0, y: -2 * minimum },
+    { x: 0, y: -minimum },
+    routeOptions,
+  );
+  const reverse = router.route(
+    { x: 0, y: -minimum },
+    { x: 0, y: -2 * minimum },
+    routeOptions,
+  );
+
+  assert.equal(forward.ok, true);
+  assert.equal(forward.distance, 3 * minimum);
+  assert.equal(
+    forward.legs.filter((leg) => leg.kind === "network").length,
+    1,
+  );
+  assert.deepEqual(reverse, { ok: false, reason: "no-route" });
+});
+
+test("orders projections even when every public position field ties", () => {
+  const minimum = Number.MIN_VALUE;
+  const early = { x: -64 * minimum, y: 34 * minimum };
+  const late = { x: -64 * minimum, y: 33 * minimum };
+  const router = new GapRouter({
+    nodes: [
+      { id: "a", x: 0, y: 0 },
+      { id: "b", x: -5, y: -7 },
+    ],
+    segments: [
+      segment(
+        "line",
+        "a",
+        "b",
+        [[0, 0], [-5, -7]],
+        { oneWay: true, speed: 1 },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 0,
+      mergeTolerance: 0,
+    },
+  });
+  const routeOptions = {
+    anchorCandidateCount: 1,
+    maxSnapDistance: 4e-322,
+  };
+
+  const forward = router.route(early, late, routeOptions);
+  const reverse = router.route(late, early, routeOptions);
+
+  assert.equal(forward.ok, true);
+  assert.equal(
+    forward.legs.filter((leg) => leg.kind === "network").length,
+    1,
+  );
+  assert.deepEqual(reverse, { ok: false, reason: "no-route" });
+});
+
+test("splits a tiny geometry with a large finite logical length", () => {
+  const minimum = Number.MIN_VALUE;
+  const maximum = Number.MAX_VALUE;
+  const router = new GapRouter({
+    nodes: [
+      { id: "a", x: 0, y: 0 },
+      { id: "b", x: minimum, y: minimum },
+    ],
+    segments: [
+      segment(
+        "line",
+        "a",
+        "b",
+        [[0, 0], [minimum, minimum]],
+        { length: maximum, oneWay: true, speed: maximum },
+      ),
+    ],
+    options: {
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 0,
+      mergeTolerance: 0,
+    },
+  });
+
+  const result = router.route(
+    { x: minimum, y: 0 },
+    { x: minimum, y: minimum },
+    { anchorCandidateCount: 1, maxSnapDistance: minimum },
+  );
+
+  assert.equal(result.ok, true);
+  const network = result.legs.find((leg) => leg.kind === "network");
+  assert.ok(network);
+  assert.equal(network.length, maximum / 2);
+  assert.equal(network.cost, 0.5);
+  assert.equal(result.distance, maximum / 2);
+  assert.equal(result.cost, 0.5);
+});
+
+test("keeps complementary splits within a maximum finite length", () => {
+  const maximum = Number.MAX_VALUE;
+  const router = new GapRouter({
+    nodes: [
+      { id: "target-a", x: 0, y: 0 },
+      { id: "target-b", x: 337_906, y: 0 },
+      { id: "source-a", x: 8, y: 3 },
+      { id: "source-b", x: 8, y: 1 },
+    ],
+    segments: [
+      segment(
+        "target",
+        "target-a",
+        "target-b",
+        [[0, 0], [337_906, 0]],
+        { length: maximum, speed: 1 },
+      ),
+      segment(
+        "source",
+        "source-a",
+        "source-b",
+        [[8, 3], [8, 1]],
+        { speed: 1 },
+      ),
+    ],
+    options: {
+      gapConnectorsPerNode: 0,
+      gapCostFactor: 1,
+      gapFixedCost: 0,
+      gapSpeed: 1,
+      maxGapDistance: 1,
+      mergeTolerance: 0,
+      projectionMinGain: 0,
+    },
+  });
+
+  const result = router.route(
+    { x: 0, y: 0 },
+    { x: 337_906, y: 0 },
+    { anchorCandidateCount: 1, maxSnapDistance: 0 },
+  );
+
+  assert.equal(result.ok, true);
+  assert.equal(result.distance, maximum);
+  assert.equal(result.cost, maximum);
+  assert.equal(result.diagnostics.projectedDeadEnds, 1);
 });
 
 test("keeps returned route data isolated from later searches", () => {
