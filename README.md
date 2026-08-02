@@ -495,6 +495,13 @@ operation, distance, and status, and prints the scope-boundary table.
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for test and design expectations and
 [SECURITY.md](./SECURITY.md) for private reporting.
 
+## Related projects
+
+- [sparse-proximity-graph](https://github.com/seoulpro/sparse-proximity-graph) —
+  deterministic construction of low-degree planar graphs.
+- [trajectory-rollup](https://github.com/seoulpro/trajectory-rollup) — trajectory
+  aggregation, developed independently; there is no integration with gap-tolerant-router.
+
 ## License
 
 [MIT](./LICENSE)
