@@ -266,8 +266,9 @@ geometry are rejected with a `TypeError`.
 ## Router reference scenarios
 
 A fully synthetic, deterministic fixture exercises the repairs and guards on a
-small planar network. It is generated from a fixed seed and is not production
-data, derived data, or anonymized real data. The eight cases are:
+small planar network. Its definition is checked into the repository and is
+reproducible from a clean checkout; it is generated from a fixed seed and is not
+production data, derived data, or anonymized real data. The eight cases are:
 
 | Case | Scenario | Expected result | Repair or guard |
 | --- | --- | --- | --- |
@@ -283,9 +284,10 @@ data, derived data, or anonymized real data. The eight cases are:
 The fixture pairs a clean network (73 nodes, 75 segments) with an imperfect
 network (74 nodes, 72 segments) that introduces the defects each case covers.
 
-A local reference benchmark run and its methodology are recorded in
-[docs/benchmarks.md](./docs/benchmarks.md). Those timings describe one machine
-and are not a performance guarantee.
+The [benchmark guide](./docs/benchmarks.md) covers both the router and the gap
+proposal engine, explains how to reproduce a run from a clean checkout, and
+describes the machine-readable JSON reports and comparison command. Its timings
+describe one machine and are not a performance guarantee.
 
 ## Limits
 
@@ -485,12 +487,25 @@ npm run check
 ```
 
 `npm run check` runs the source syntax checks, the TypeScript consumer checks,
-the test suite under coverage thresholds, and a packed-tarball installation
-smoke test.
+the test suite under coverage thresholds, a documentation link-and-anchor check,
+the package checks, a packed-tarball installation smoke test, and a deterministic
+benchmark smoke run.
 
 `npm run examples:industrial` runs the four synthetic industrial conformance
 fixtures, checking that each one still produces its expected candidate,
 operation, distance, and status, and prints the scope-boundary table.
+
+The benchmark suite lives under `benchmark/` and runs from a clean checkout:
+
+```sh
+npm run benchmark                                    # quick router and engine profile
+npm run benchmark:scaling                            # larger sizes, to observe scaling
+npm run benchmark:stress                             # heavier engine and grid workloads
+npm run benchmark:compare -- before.json after.json  # compare two JSON reports
+```
+
+See the [benchmark guide](./docs/benchmarks.md) for capture and comparison
+details.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for test and design expectations and
 [SECURITY.md](./SECURITY.md) for private reporting.

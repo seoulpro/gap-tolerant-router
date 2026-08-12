@@ -1,7 +1,7 @@
 {
   "name": "gap-tolerant-router",
-  "version": "0.2.0",
-  "description": "A deterministic router for imperfect planar line networks.",
+  "version": "0.2.1",
+  "description": "A deterministic router for imperfect planar line networks, with a proposal-only 2D/3D gap analysis engine.",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -28,18 +28,19 @@
   "scripts": {
     "test": "node --test",
     "coverage": "node --experimental-test-coverage --test --test-coverage-lines=95 --test-coverage-branches=85 --test-coverage-functions=95",
-    "lint": "node --check src/index.js && node --check src/router.js && node --check src/instructions.js && node --check src/numerics.js && node --check src/engine.js && node --check examples/run-industrial-conformance.mjs && node --check benchmark/fixtures.mjs && node --check benchmark/run.mjs && node --check benchmark/compare.mjs",
+    "lint": "node --check src/index.js && node --check src/router.js && node --check src/instructions.js && node --check src/numerics.js && node --check src/engine.js && node --check examples/run-industrial-conformance.mjs && node --check benchmark/fixtures.mjs && node --check benchmark/run.mjs && node --check benchmark/compare.mjs && node --check scripts/check-docs.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "package:lint": "publint",
     "package:types": "node scripts/check-package-types.mjs",
     "package:check": "node scripts/check-package.mjs",
+    "docs:check": "node scripts/check-docs.mjs",
     "examples:industrial": "node examples/run-industrial-conformance.mjs",
     "benchmark": "node benchmark/run.mjs",
     "benchmark:compare": "node benchmark/compare.mjs",
     "benchmark:scaling": "node benchmark/run.mjs --profile=scaling",
     "benchmark:smoke": "node benchmark/run.mjs --profile=smoke --json",
     "benchmark:stress": "node benchmark/run.mjs --profile=stress",
-    "check": "npm run lint && npm run typecheck && npm run coverage && npm run package:lint && npm run package:types && npm run package:check && npm run benchmark:smoke",
+    "check": "npm run lint && npm run typecheck && npm run coverage && npm run docs:check && npm run package:lint && npm run package:types && npm run package:check && npm run benchmark:smoke",
     "prepublishOnly": "npm run check"
   },
   "keywords": [
@@ -48,7 +49,11 @@
     "a-star",
     "pathfinding",
     "planar-graph",
-    "topology"
+    "topology",
+    "gap-analysis",
+    "network-repair",
+    "spatial-analysis",
+    "3d"
   ],
   "engines": {
     "node": ">=22"

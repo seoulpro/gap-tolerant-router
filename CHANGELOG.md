@@ -6,6 +6,33 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## 0.2.1 - 2026-08-12
+
+### Added
+
+- Reproducible benchmark suite under `benchmark/`, with quick, scaling, and
+  stress profiles covering router construction, the eight router reference
+  cases, a regular grid, and the gap analysis engine (sparse 2D and 3D,
+  projection, constraint assessment, dense truncation, and a default work
+  limit).
+- Checked-in deterministic synthetic fixture generators for those workloads,
+  each case measured in a separate worker process, with output digests and
+  structural counters verified after every warmup, calibration batch, and
+  measured sample.
+- Versioned JSON benchmark reports (`--json`) and
+  `npm run benchmark:compare -- before.json after.json`, which joins cases by
+  name and size, reports median deltas and digest equality, and warns when the
+  environment, configuration, or profile differs. Reports record Node.js, V8,
+  platform, CPU, package version, and source revision, and exclude hostnames,
+  usernames, environment variables, and local paths.
+- Documentation link-and-anchor check (`npm run docs:check`) and a deterministic
+  benchmark smoke run in the full `npm run check` quality gate. The smoke run
+  checks completion and deterministic structure, not timing thresholds.
+
+### Changed
+
+- Updated the `publint` development dependency from 0.3.22 to 0.3.23.
+
 ## 0.2.0 - 2026-07-31
 
 ### Added
