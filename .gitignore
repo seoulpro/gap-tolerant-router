@@ -7,6 +7,8 @@ coverage/
 *.swp
 *.log
 *.tgz
+benchmark-*.json
+*.benchmark.json
 .env
 .env.*
 !.env.example

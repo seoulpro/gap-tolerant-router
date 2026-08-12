@@ -28,13 +28,18 @@
   "scripts": {
     "test": "node --test",
     "coverage": "node --experimental-test-coverage --test --test-coverage-lines=95 --test-coverage-branches=85 --test-coverage-functions=95",
-    "lint": "node --check src/index.js && node --check src/router.js && node --check src/instructions.js && node --check src/numerics.js && node --check src/engine.js && node --check examples/run-industrial-conformance.mjs",
+    "lint": "node --check src/index.js && node --check src/router.js && node --check src/instructions.js && node --check src/numerics.js && node --check src/engine.js && node --check examples/run-industrial-conformance.mjs && node --check benchmark/fixtures.mjs && node --check benchmark/run.mjs && node --check benchmark/compare.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "package:lint": "publint",
     "package:types": "node scripts/check-package-types.mjs",
     "package:check": "node scripts/check-package.mjs",
     "examples:industrial": "node examples/run-industrial-conformance.mjs",
-    "check": "npm run lint && npm run typecheck && npm run coverage && npm run package:lint && npm run package:types && npm run package:check",
+    "benchmark": "node benchmark/run.mjs",
+    "benchmark:compare": "node benchmark/compare.mjs",
+    "benchmark:scaling": "node benchmark/run.mjs --profile=scaling",
+    "benchmark:smoke": "node benchmark/run.mjs --profile=smoke --json",
+    "benchmark:stress": "node benchmark/run.mjs --profile=stress",
+    "check": "npm run lint && npm run typecheck && npm run coverage && npm run package:lint && npm run package:types && npm run package:check && npm run benchmark:smoke",
     "prepublishOnly": "npm run check"
   },
   "keywords": [
