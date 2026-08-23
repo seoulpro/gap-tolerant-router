@@ -58,7 +58,7 @@
   "engines": {
     "node": ">=22"
   },
-  "author": "Sumin Lim <lim@limsumin.com>",
+  "author": "Sumin Lim <lim@limsumin.com> (https://limsumin.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seoulpro/gap-tolerant-router.git"
