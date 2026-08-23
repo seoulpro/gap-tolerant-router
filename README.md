@@ -106,6 +106,21 @@ consistent system. Route `cost` is measured in the time unit implied by
 `length / speed`. A custom segment `length` is distributed proportionally across
 projected subsegments.
 
+### Coordinate systems and units
+
+The router performs planar Euclidean geometry and does not inspect, infer, or
+convert a coordinate reference system. Every coordinate and distance option —
+including the defaults `mergeTolerance: 1` and `maxGapDistance: 40` — is in the
+caller's coordinate unit. Those defaults are not safe real-world distances for
+every dataset.
+
+Do not pass longitude/latitude degrees directly unless planar degree-distance
+is deliberately appropriate for a small, controlled extent. Production map
+adapters should project positions into a suitable local planar CRS, convert all
+tolerances and speeds into that same unit system, and record that choice beside
+the source data. Validate the chosen repair distances against domain semantics;
+a numerically close endpoint is not necessarily a permitted connection.
+
 ## Input contract
 
 Nodes may be an array of `{ id, x, y }` or a `Map<id, { x, y }>`. Node and
