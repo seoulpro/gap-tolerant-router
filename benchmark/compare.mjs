@@ -32,11 +32,12 @@ const { values, positionals } = parseArgs({
   strict: true,
   options: {
     json: { type: "boolean", default: false },
+    "fail-on-output-change": { type: "boolean", default: false },
     help: { type: "boolean", short: "h", default: false },
   },
 });
 
-const usage = "Usage: node benchmark/compare.mjs [--json] <baseline.json> <candidate.json>";
+const usage = "Usage: node benchmark/compare.mjs [--json] [--fail-on-output-change] <baseline.json> <candidate.json>";
 
 if (values.help) {
   console.log(usage);
@@ -155,5 +156,11 @@ if (values.help) {
     console.log(
       "Positive timing change is slower. Deltas are descriptive, not a statistical significance claim.",
     );
+  }
+  if (
+    values["fail-on-output-change"]
+    && results.some((result) => result.output === "changed")
+  ) {
+    process.exitCode = 1;
   }
 }

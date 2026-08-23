@@ -46,6 +46,7 @@ per-sample timings, statistics, and output digest.
 
 ```sh
 npm run benchmark:compare -- benchmark-before.json benchmark-after.json
+npm run benchmark:compare -- --fail-on-output-change benchmark-before.json benchmark-after.json
 ```
 
 The comparison joins cases by name and size, refuses to compare reports whose
@@ -55,6 +56,12 @@ percentage change, both coefficients of variation, and whether the output digest
 stayed the same. A positive change is slower. The deltas are descriptive; they
 are not a statistical significance claim. Add `--json` for machine-readable
 comparison output.
+
+By default the command is descriptive and exits successfully even when an
+output digest changed. Pass `--fail-on-output-change` in CI to receive exit code
+`1` after the comparison is printed whenever equivalent cases produced
+different output. Timing changes remain descriptive because noisy benchmark
+samples are not a reliable universal pass/fail threshold.
 
 ## Method
 

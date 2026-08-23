@@ -517,6 +517,7 @@ npm run benchmark                                    # quick router and engine p
 npm run benchmark:scaling                            # larger sizes, to observe scaling
 npm run benchmark:stress                             # heavier engine and grid workloads
 npm run benchmark:compare -- before.json after.json  # compare two JSON reports
+npm run benchmark:compare -- --fail-on-output-change before.json after.json
 ```
 
 See the [benchmark guide](./docs/benchmarks.md) for capture and comparison
