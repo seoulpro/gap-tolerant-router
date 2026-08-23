@@ -6,6 +6,12 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Documentation now states the router's planar coordinate and unit contract,
+  including why longitude/latitude inputs and default tolerances require an
+  explicit production decision.
+
 ## 0.2.1 - 2026-08-12
 
 ### Added
