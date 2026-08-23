@@ -8,6 +8,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Benchmark comparisons accept `--fail-on-output-change`, allowing CI to reject
+  semantic output drift while keeping timing deltas descriptive.
 - Documentation now states the router's planar coordinate and unit contract,
   including why longitude/latitude inputs and default tolerances require an
   explicit production decision.
